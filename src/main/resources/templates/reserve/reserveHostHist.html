@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/mylayout}">
+
+<head>
+  <meta name="_csrf" th:content="${_csrf.token}"/>
+  <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+</head>
+
+<!-- 사용자 스크립트 추가 -->
+<th:block layout:fragment="script">
+  <script th:inline="javascript">
+
+    </script>
+</th:block>
+
+<!-- 사용자 CSS 추가 -->
+<th:block layout:fragment="css">
+  <style>
+        .content-mg{
+            margin-left:30%;
+            margin-right:30%;
+            margin-top:2%;
+            margin-bottom:100px;
+        }
+        .repImgDiv{
+            margin-right:15px;
+            margin-left:15px;
+            height:auto;
+        }
+        .repImg{
+            height:100px;
+            width:100px;
+        }
+        .card{
+            width:750px;
+            height:100%;
+            padding:30px;
+            margin-bottom:20px;
+        }
+        .fs18{
+            font-size:18px
+        }
+        .fs24{
+            font-size:24px
+        }
+    </style>
+</th:block>
+
+<div class="content" layout:fragment="content">
+  <h2>주문 내역 페이지</h2>
+
+  <div th:each="reserve : ${reserves.getContent()}">
+    <div class="align-self-center">
+      <h4 th:text="${reserve.reserveDate} + ' 주문날짜'"></h4>
+      <h4 th:text="${reserve.startTime} + ' 파티룸 사용 시간'"></h4>
+      <h4 th:text="${reserve.endTime} + ' 파티룸 종료 시간'"></h4>
+
+    </div>
+    <div class="card">
+      <div th:each="reserveProduct : ${reserve.reserveProductDtoList}">
+        <div class="repImgDiv">
+          <img th:src="${reserveProduct.imageUrl}" class="rounded repImg" th:alt="${reserveProduct.name}">
+        </div>
+        <div class="align-self-center">
+          <span th:text="${reserveProduct.name}" class="fs24 font-weight-bold"></span>
+          <div class="fs18 font-weight-light">
+            <span th:text="${#numbers.formatInteger(reserveProduct.reservePrice, 0, 'COMMA')}"></span> 원
+            <span th:text="${reserveProduct.count} + '개'"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div th:with="start=${(reserves.number/maxPage)*maxPage + 1}, end=(${(reserves.totalPages == 0) ? 1 : (start + (maxPage - 1) < reserves.totalPages ? start + (maxPage - 1) : reserves.totalPages)})" >
+    <ul class="pagination justify-content-center">
+
+      <li class="page-item" th:classappend="${reserves.number eq 0}?'disabled':''">
+        <a th:href="@{'/reserves/' + ${reserves.number-1}}" aria-label='Previous' class="page-link">
+          <span aria-hidden='true'>Previous</span>
+        </a>
+      </li>
+
+      <li class="page-item" th:each="page: ${#numbers.sequence(start, end)}" th:classappend="${reserves.number eq page-1}?'active':''">
+        <a th:href="@{'/reserves/' + ${page-1}}" th:inline="text" class="page-link">[[${page}]]</a>
+      </li>
+
+      <li class="page-item" th:classappend="${reserves.number+1 ge reserves.totalPages}?'disabled':''">
+        <a th:href="@{'/reserves/' + ${reserves.number+1}}" aria-label='Next' class="page-link">
+          <span aria-hidden='true'>Next</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+</div>
+</html>

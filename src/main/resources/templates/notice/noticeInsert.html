@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/mylayout}" xmlns="http://www.w3.org/1999/html">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- 사용자 정의 CSS 추가 -->
+    <th:block layout:fragment="css">
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                background-color: #f5f5f5;
+                margin: 0;
+                padding: 3cm 0 0;
+            }
+
+            .content {
+                margin: 30px auto;
+                max-width: 600px;
+                padding: 20px;
+                background-color: #fff;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            }
+
+            form {
+                margin-top: 20px;
+                text-align: center;
+            }
+
+            label {
+                display: block;
+                font-weight: bold;
+                margin-bottom: 5px;
+            }
+
+            input[type="text"],
+            textarea {
+                width: 100%;
+                padding: 8px;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+                font-size: 14px;
+            }
+
+            .fieldError {
+                color: red;
+                font-size: 13pt;
+            }
+
+            button[type="submit"] {
+                display: inline-block;
+                padding: 10px 20px;
+                border-radius: 4px;
+                background-color: #007bff;
+                color: #fff;
+                text-decoration: none;
+                border: none;
+                transition: background-color 0.3s ease;
+            }
+
+            button[type="submit"]:hover {
+                background-color: #0056b3;
+            }
+
+        </style>
+    </th:block>
+</head>
+
+<body>
+<div class="content" layout:fragment="content">
+    <form action="" method="post" role="form" th:object="${noticeDto}">
+        <div>
+            <label for="title">제목:</label>
+            <input type="text" th:field="*{noTitle}" id="title">
+            <span th:if="${#fields.hasErrors('noTitle')}" th:errors="*{noTitle}"
+                  class="fieldError"></span>
+        </div>
+        <div>
+            <label for="content">내용:</label>
+            <textarea th:field="*{noContent}" id="content"></textarea>
+            <span th:if="${#fields.hasErrors('noContent')}" th:errors="*{noContent}"
+                  class="fieldError"></span>
+        </div>
+        <div>
+            <button th:formaction="@{/notice/new}" type="submit" class="btn btn-primary">
+                등록
+            </button>
+        </div>
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+    </form>
+</div>
+</body>
+
+</html>

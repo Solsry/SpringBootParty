@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/mylayout2}" xmlns="http://www.w3.org/1999/html">
+<!-- 사용자 스크립트 추가 -->
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+
+    </script>
+</th:block>
+
+
+<!-- 사용자 CSS 추가 -->
+<th:block layout:fragment="css">
+    <style>
+/* 사용자 지정 스타일 */
+.content {
+margin-top: 30px;
+}
+table {
+width: 100%;
+border-collapse: collapse;
+}
+table td, table th {
+padding: 10px;
+border: 1px solid #ccc;
+}
+</style>
+</th:block>
+
+<div class="content" layout:fragment="content">
+    <table class="table" width="25%">
+        <tr>
+            <th colspan="2">관리자</th>
+        </tr>
+        <tr>
+            <td>공지사항</td>
+            <td th:text="${notice.noContent}"></td>
+        </tr>
+    </table>
+    <hr/>
+    <a th:href="'/notice/list'" class="btn btn-primary">돌아 가기</a>
+</div>
+</html>
+
